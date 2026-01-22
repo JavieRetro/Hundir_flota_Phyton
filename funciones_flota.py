@@ -3,6 +3,7 @@ import random
 Agua = "🌊"
 Tocado = "🔥"
 Hundido = "☠️"
+Barco = "B"
 
 flota = {
     "portaaviones": 5,
@@ -22,7 +23,7 @@ while tam not in [8,10]:
     tam = int(input("Tamaño inválido, escoge otro(8, 10)"))
 
 #Creamos un tablero con las dimensiones de tam
-tablero = [[" " for i in range(tam)]for i in range(tam)]
+tablero= [[" " for i in range(tam)]for i in range(tam)]
 
 # ====================
 # MOSTRAR TABLERO
@@ -61,41 +62,64 @@ def colocar_barcos(tablero, flota):
     #Metodo while con el cuál buscamos colocar cada barco
         while not colocado:
 
-            orientacion = random.choices(["H", "V"])
+            orientacion = random.choices(["Horizontal", "Vertical"])
             fila = random.randint(0, n-1)
             columna = random.randint(0, n-1)
 
 #-----------------------
 # COLOCACIÓN HORIZONTAL
 #------------------------  
-            if orientacion == "H" and columna + tamaño <= n:
+            if orientacion == "Horizontal" and columna + tamaño <= n:
                 espacio_libre = True 
 
-            #Comprobamos si las casillas del tablero estan libre
-            for i in range(tamaño):
-
-                if tablero[fila][columna +i] != " ":
-                    espacio_libre = False 
-        
-            if espacio_libre:
+                #Comprobamos si las casillas del tablero estan libre
                 for i in range(tamaño):
-                    tablero[fila][columna + i] = Barco
+
+                    if tablero[fila][columna +i] != " ":
+                        espacio_libre = False 
+        
+                if espacio_libre:
+                    for i in range(tamaño):
+                        tablero[fila][columna + i] = Barco
                     colocado = True
 
 #-----------------------
 # COLOCACIÓN VERTICAL
 #------------------------  
 
-        if orientacion == "V" and fila + tamaño <= n:
-            espacio_libre = True 
+            elif orientacion == "Vertical" and fila + tamaño <= n:
+                espacio_libre = True 
 
-        #Comprobamos si las casillas del tablero estan libre
-        for i in range(tamaño):
+                #Comprobamos si las casillas del tablero estan libre
+                for i in range(tamaño):
 
-            if tablero[fila + i][columna] != " ":
-                espacio_libre = False 
+                    if tablero[fila + i][columna] != " ":
+                        espacio_libre = False 
         
-        if espacio_libre:
-            for i in range(tamaño):
-                tablero[fila + i][columna] = Barco
+                if espacio_libre:
+                    for i in range(tamaño):
+                        tablero[fila + i][columna] = Barco
                 colocado = True
+
+
+#-------------------
+# COMPROBAMOS HUNDIMIENTO
+#-------------------
+def comprobar_barcos_hundidos(tablero_oculto, fila, columna):
+
+    n = len(tablero_oculto)
+
+    # Revisamos partes del barco que queden por hundr
+    for i in range(n):
+        for j in range(n):
+            if tablero_oculto[i][j] == Barco:
+                return False
+    return True
+
+# ------------------
+# MOVIMIENTO(DISPARO)
+#--------------------
+def disparar(tablero_visble, tablero_oculto, fila, columna):
+
+    if tablero_oculto[fila][columna] != Agua:
+        
