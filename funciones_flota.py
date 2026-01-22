@@ -3,14 +3,13 @@ import random
 Agua = "🌊"
 Tocado = "🔥"
 Hundido = "☠️"
-Barco = "B"
 
 flota = {
-    "portaaviones": 5,
-    "buque": 4,
-    "submarino": 3,
-    "Crucero": 2,
-    "Lancha": 1
+    "Portaaviones": ("P", 5),
+    "buque": ("B", 4),
+    "submarino": ("S", 3),
+    "Crucero": ("C", 2),
+    "Lancha": ("L", 1)
 }
 
 # ====================
@@ -53,10 +52,10 @@ mostrarTablero(tablero)
 def colocar_barcos(tablero, flota):
 
     n = len(tablero)
-
     #Recorremos cada barco de la flota
     for nombre in flota:
-        tamaño = flota[nombre]
+        letra = flota[nombre][0]
+        tamaño = flota[nombre][1]
         colocado = False
 
     #Metodo while con el cuál buscamos colocar cada barco
@@ -80,7 +79,7 @@ def colocar_barcos(tablero, flota):
         
                 if espacio_libre:
                     for i in range(tamaño):
-                        tablero[fila][columna + i] = Barco
+                        tablero[fila][columna + i] = letra
                     colocado = True
 
 #-----------------------
@@ -98,22 +97,29 @@ def colocar_barcos(tablero, flota):
         
                 if espacio_libre:
                     for i in range(tamaño):
-                        tablero[fila + i][columna] = Barco
+                        tablero[fila + i][columna] = letra
                 colocado = True
 
+
+#---------------------
+# NOMBRE DEL BARCO
+#---------------------
+def nombre_barco(letra):
+
+    for nombre in flota:
+        if flota[nombre][0] == letra:
+            return nombre 
 
 #-------------------
 # COMPROBAMOS HUNDIMIENTO
 #-------------------
-def comprobar_barcos_hundidos(tablero_oculto, fila, columna):
+def comprobar_barcos_hundidos(tablero, letra):
 
-    n = len(tablero_oculto)
-
+    n = len(tablero)
     # Revisamos partes del barco que queden por hundr
-    for i in range(n):
-        for j in range(n):
-            if tablero_oculto[i][j] == Barco:
-                return False
+    for fila in tablero:
+        if letra in fila:
+            return False
     return True
 
 # ------------------
@@ -121,5 +127,15 @@ def comprobar_barcos_hundidos(tablero_oculto, fila, columna):
 #--------------------
 def disparar(tablero_visble, tablero_oculto, fila, columna):
 
-    if tablero_oculto[fila][columna] != Agua:
+    #Repetir casilla de disparo
+    if tablero_visble[fila][columna] == [Agua, Tocado, Hundido]:
+        print("Ya disparaste a esa posicion, prueba otra.")
+        return
+    
+    #Barco tocado
+    if tablero_oculto[fila][columna] != " ":
+        tablero_visble[fila][columna] = Tocado
+        tablero_oculto[fila][columna] = Tocado
+        nombre = nombre.barco(tablero_oculto[fila][columna])
+        print(f"{nombre} tocado.")
         
