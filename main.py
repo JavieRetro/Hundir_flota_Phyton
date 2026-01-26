@@ -40,9 +40,10 @@ while quedan_barcos(tablero_oculto):
     #El tablero visible sigue siendo el unico que se muestra
     mostrarTablero(tablero_visible)
 
+
     try:
-        fila = int(input(f" Introduce la primera coordenada:(0, {tam-1})"))
-        columna = int(input(f"Introduce la primera coordenada: Columna: (0, {tam-1})"))
+        fila = int(input(f" Introduce la primera coordenada:(0, {tam-1}): "))
+        columna = int(input(f"Introduce la primera coordenada: Columna: (0, {tam-1}): "))
     except ValueError:
         print("Entrada inválida, escoge otra.")
         continue
